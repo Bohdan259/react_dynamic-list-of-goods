@@ -5,7 +5,7 @@ type Props = {
   goods: Good[];
 };
 
-export const GoodsList = React.memo(({ goods}: Props) => (
+export const GoodsList = React.memo(({ goods }: Props) => (
   <ul>
     {goods.map(good => (
       <li key={good.id} data-cy="good" style={{ color: good.color }}>
@@ -15,4 +15,4 @@ export const GoodsList = React.memo(({ goods}: Props) => (
   </ul>
 ));
 
-GoodsList.displayName='GoodList';
+GoodsList.displayName = 'GoodList';
