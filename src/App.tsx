@@ -5,7 +5,15 @@ import { Good } from './types/Good';
 import { get5First, getAll, getRedGoods } from './api/goods';
 
 export const App: React.FC = () => {
-  const [users, setUsers] = useState<Good[]>([]);
+  const [goods, setGoods] = useState<Good[]>([]);
+  const [error, setError] = useState('');
+
+  const loadGood = (fetcher: () => Promise<Good[]>) => {
+    setError('');
+    fetcher()
+      .then(setGoods)
+      .catch(() => setError('Ooops something went wrong!'));
+  };
 
   return (
     <div className="App">
@@ -14,7 +22,7 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="all-button"
-        onClick={() => getAll().then(setUsers)}
+        onClick={() => loadGood(getAll)}
       >
         Load all goods
       </button>
@@ -22,7 +30,7 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="first-five-button"
-        onClick={() => get5First().then(setUsers)}
+        onClick={() => loadGood(get5First)}
       >
         Load 5 first goods
       </button>
@@ -30,12 +38,13 @@ export const App: React.FC = () => {
       <button
         type="button"
         data-cy="red-button"
-        onClick={() => getRedGoods().then(setUsers)}
+        onClick={() => loadGood(getRedGoods)}
       >
         Load red goods
       </button>
 
-      <GoodsList goods={users} />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <GoodsList goods={goods} />
     </div>
   );
 };
